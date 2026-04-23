@@ -1,0 +1,243 @@
+* Why performance?
+ * >> User Experience 
+*  >> Productivity
+*  >> Customer Satisfaction
+*  >> Revenue & Profitability
+*  >> Operational Costs
+*  >> Competitive Advantage
+*  >> Search engine rankings are based on performance
+*  >> Business Metrics
+*   >>> Session time 
+*   >>> Bounce Rate (people may want to use it but because of performance may bounce back)
+
+Understanding your users
+* The device they are using
+* [analytics](https://developers.google.com/analytics)
+* [clue worldwide analytic](https://radar.cloudflare.com)
+* [Cost of JS](https://v8.dev/blog/cost-of-javascript-2019)
+* Network Quality
+* Performance Metric
+> ![core web vitals](https://addyosmani.com/assets/images/core-web-vitals-addy.png)
+![](https://www.debugbear.com/assets/images/paint-filmstrip-1d88a47ac0abe8884a2ddb1a10e9dcae.png)
+[fcp lcp](https://www.debugbear.com/docs/metrics/first-contentful-paint)
+![](https://web.dev/static/articles/lcp/image/largest-contentful-paint-6c5554de0eac7.png)
+
+[CLS](https://www.positional.com/blog/cumulative-layout-shift)
+
+![INP](https://www.debugbear.com/dimg/10b15d11f10f6002c1d9ab48cd46c64f.png)
+[INP](https://web.dev/articles/inp)
+* Measuring Performance
+performance measuring websites
+* [sentry](https://sentry.io/welcome/)
+* [microsoft clarity](https://clarity.microsoft.com)
+
+* GPU/CPU
+[JS startup performance ](https://medium.com/reloading/javascript-start-up-performance-69200f43b201)
+
+* Problem can be at
+Browser  at asset level, may not be using best practices/ Network layer / Server
+* Network Optimization
+* Asset Optimization
+* React Optimization
+* Build Optimization
+* Rendering Pattern
+------------------------------------------------------------------------------------
+## PERFORMANCE TOOLS
+1. Developer Mode
+1. Simulated Data
+1. Real User Data
+
+Real User Data=
+* CRUX -Chrome User Experience Report
+[CRUX](https://developer.chrome.com/docs/crux/dashboard)
+* [PageSpeed.web.dev](https://pagespeed.web.dev)
+* requestMetrics.com
+* https://requestmetrics.com
+* [microsoft clarity](https://clarity.microsoft.com)
+* Sentry
+* Google analytics
+* new relic
+
+Simulate data-
+* webpagetest.org (region wise simulation)
+
+Developer Mode-
+* Lighthouse
+* Network Tab
+* Performance Tab
+* Test in incognito mode
+* pull the inspect out
+* Devices -Mobile / Desktop
+1. Use lighthouse
+1. Use Network tab (Priority, time tab)
+1. Using different thresholds in network tab
+1. Check in Disable cache in Network tab
+1. In Performance tab - using snapshot, memory
+
+***
+
+## Network Optimization
+1. Critical Rendering Path
+1. Minimize HTTP requests
+1. Async Javascript
+1. Avoid Redirection
+1. Resource Hinting
+1. Fetch Priority
+1. Early Hints
+1. HTTP upgrade methods (http 1.1 vs http2 vs http3)
+1. Compression: brotli/ gzip
+1. HTTP caching: Cache Control
+1. Caching using Service Worker
+
+###  Critical Rendering Path
+### Minimize Network requests
+* Challenges
+1. Connection Time (TCP,SSL)
+1. Browser Limit per domain (6 - 10 max parallel calls can be made)
+
+* Solution:
+1. Inline CSS
+1. Inline JS
+1. Base64 for image
+1. SVG for image
+
+### Async Javascript
+![](https://www.growingwiththeweb.com/images/2014/02/26/async-vs-defer-twitter.png)
+
+### Avoid Redirection
+- Avoid redirection from http to https
+-done using hstspreload.org
+[hsts](https://hstspreload.org)
+
+### Resource Hinting
+
+* same domain css,js
+* cross domain css,js,fonts
+* load image after API response
+* fonts from css file
+
+1. - preconnect (connect to specific cross origin server in advance) - to avoid making connections again and again
+eg. <link rel="preconnect" href="https://cdn.glitch.global"/>
+* [performance resource hints](https://learn-performance-resource-hints.glitch.me/1)
+1. dns-prefetch (does DNS lookup in advance)
+eg. <link rel="dns-prefetch"
+      href="https://fonts.gstatic.com">
+1. preload(initiate early request to resource for rendering the page)
+eg. <link rel="preload"
+      href="https://font.woff2" as="font" crossorigin>
+* when parsing of HTML is going on pre-hints happen in parallel
+1. prefetch(load resources which are needed in near future with low priority -future navigation)
+eg. <link rel= "prefetch" href="/next-page.css" as="style">
+
+1. prerender (loads entire page and all its dependency in background which display hidden)
+eg. <link rel="pretendeer" href="blog.html">
+
+### Resource Hint Priority
+`<!-- Lower priority only for nob-critical preloaded scripts-->
+<link rel="preload" href="critical-script.js" as= "script" >
+<link rel="preload" href="/js/script.js" as= "script" fetchpriority="low">
+<!-- Preload CSS without blocking other resources-->
+<link rel="preload" as="style" href="theme.css" fetchpriority="low" onload="this.rel='stylesheet">
+`
+* preload is just going to download. to render is needs relation as stylesheet
+[fetch priority](https://web.dev/articles/fetch-priority)
+
+### Early Hints
+![](https://www.akamai.com/site/en/images/blog/2024/akamai-early-hints-improving-user-experience-one.png)
+[early hints](https://developer.chrome.com/docs/web-platform/early-hints)
+
+### HTTP upgrade methods (http 1.1 vs http2 vs http3)
+![http](https://images.ctfassets.net/ee3ypdtck0rk/4du4aqnKuOLU4YbbHWYSfv/c88d774f278090e6ef3a5435b46bbfea/Screen_Shot_2021-01-28_at_6.54.47.png?w=1558&h=636&q=80&fm=png)
+![differences](https://cdn.prod.website-files.com/5ff66329429d880392f6cba2/676d4500b15423be50fc505c_6149cc01573487fea0af8519_http1%2520vs%2520http2%2520vs%2520http3.png)
+* in http1 images loaded at a time are limited, remaining images load /requests occur after the previous requests are completed
+* spy is library helps to create http2 server.
+and http2 server requires https . we need https certificate
+* install open ssl
+* all images ,css load in parallel
+http3-used in streaming- may be package is lost..
+
+###  Compression: brotli/ gzip
+* gzip-optimizes page
+[brotli compression](https://web.dev/articles/codelab-text-compression-brotli)
+* in network tab -->see content-encoding column
+
+### HTTP caching: Cache Control
+* we can use cache policy (cache-control, expire, tag, last-modified)
+### Caching using Service Worker
+
+***
+
+## Rendering Patterns
+### Client (CSR)
+### Server
+* Dynamic(SSR)
+* Static(SSG)(static side generation)
+
+### React Server Component(RSC) (combination of SCR,SSR)
+* NEXT.JS
+
+json-server --> helps for creating any json data to server 
+![CSR](https://kruschecompany.com/wp-content/uploads/2018/07/CSR-client-side-rendering-infographic.png)
+
+![Portfolio 2](https://github.com/user-attachments/assets/64f21fa4-6690-4184-8450-1998e07744cf)
+
+![Portfolio 3](https://github.com/user-attachments/assets/f07914d4-88ca-43bd-8854-47d66b0e4c77)
+
+delta is -->for SSR-- getServerSideProps
+![Portfolio 4](https://github.com/user-attachments/assets/83277a09-018a-4d59-baff-2997b8db8724)for SSG-- getStaticProps
+
+![react server components](https://vercel.com/_next/image?url=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Fcontentful%2Fimage%2Fe5382hct74si%2FkOA2be85nVBQhL0LA9zmO%2F71f1f53fbf206a18f791b38f8cb2fd6b%2FWithout_React-1.png&w=1920&q=75)
+[use-server](https://react.dev/reference/rsc/use-server)
+
+![](https://vercel.com/_next/image?url=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Fcontentful%2Fimage%2Fe5382hct74si%2F2aHwJjySBsOw8LIAO17NqR%2F9ab2c561c1792af8e874a75ed23c0bda%2FWith_React-1.png&w=1920&q=75)
+React Server Component -- We can decide what part can be rendered on client and what on server
+
+
+1. Benefits - 
+* Data fetching
+* Security
+* Caching
+* Bundle Size
+* Initial Page Load
+* Streaming
+* SEO
+
+***
+### Build optimisation
+Bundler 
+Tool (Input is optimised and browser compatible output is given)
+
+* Module management
+* Optimization
+* Development Enhancement
+* Cross Browser Compatbility
+* Asset Management
+
+bundlers 
+![bundlers](https://miro.medium.com/v2/resize:fit:1400/1*qOQMJ4e-P03qPFzpMRR4tA.png)
+
+> Optimization
+>> Customer Experience
+>> DeveloperEperience
+
+>> Customer Experience
+1. Code splitting
+1. Tree shaking --to remove dead code
+1. Minification
+1. Code obfuscation
+1. Pruning and optimising CSS
+1. Compression
+1. Optimising images & assets
+1. Remove source maps in production
+1. Profiling and Analyzing bundles
+1. Pre-rendering (SSG)
+1. Cache using Asset hashing
+1. Vendor Chunk Splitting - whenever chunk is loading put the vendor inside that chunk that kind of optimisation is done.
+
+>> DeveloperEperience
+1. Faster builds --> choose bundler based on build time
+1. Parallelisation
+1. Cache management
+1. Incremental Compilation
+1. Hot module replacement (HRM)
+1. Monorepos with tools Loke Learna or Nx
